@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DXF to 3D</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <aside id="panel">
+    <h1>DXF → 3D</h1>
+    <p class="muted">Open-format 2D CAD drawing in, 3D model and code out. Runs entirely in your browser.</p>
+    <div id="drop">Drop a <b>.dxf</b> file here
+      <div class="row"><label class="btn">Choose file<input id="file" type="file" accept=".dxf" hidden /></label>
+      <button id="sample" class="btn ghost">Load sample</button></div></div>
+    <label>Extrude depth <output id="depthOut">10</output>
+      <input id="depth" type="range" min="0.5" max="100" step="0.5" value="10" /></label>
+    <label>Scale <input id="scale" type="number" value="1" step="0.1" min="0.001" /></label>
+    <label class="row"><input id="wire" type="checkbox" /> Wireframe</label>
+    <div id="stats" class="muted">No drawing loaded.</div>
+    <div class="row">
+      <button id="stl" class="btn" disabled>Export STL</button>
+      <button id="obj" class="btn" disabled>Export OBJ</button>
+      <button id="scad" class="btn" disabled>Save .scad</button>
+    </div>
+    <details open><summary>OpenSCAD code</summary><textarea id="code" readonly spellcheck="false"></textarea></details>
+  </aside>
+  <main id="view"></main>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{
+  "name": "dxf-to-3d",
+  "version": "0.1.0",
+  "description": "Turn open-format 2D CAD drawings (DXF) into 3D models: extrude, preview, export STL/OBJ, generate OpenSCAD code.",
+  "type": "module",
+  "license": "MIT",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "dxf-parser": "^1.1.2",
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "vite": "^6.0.0"
+  }
+}
