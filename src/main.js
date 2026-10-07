@@ -4,6 +4,7 @@ import { STLExporter } from 'three/examples/jsm/exporters/STLExporter.js';
 import { OBJExporter } from 'three/examples/jsm/exporters/OBJExporter.js';
 import { parseDxf } from './pipeline.js';
 import { toOpenSCAD } from './openscad.js';
+import { buildMessages } from './prompt.js';
 
 const $ = (id) => document.getElementById(id);
 const view = $('view');
@@ -63,15 +64,17 @@ function build() {
   const b = data.bounds;
   $('stats').textContent = `${data.entityCount} entities → ${data.loops.length} closed loops, ${data.profiles.length} solid profile(s). Footprint ${(b.w * scale).toFixed(2)} × ${(b.h * scale).toFixed(2)}.` + (data.skipped ? ` ${data.skipped} unsupported entities skipped.` : '');
   updateCode();
-  ['stl', 'obj', 'scad'].forEach((id) => ($(id).disabled = false));
+  ['stl', 'obj', 'scad', 'prompt'].forEach((id) => ($(id).disabled = false));
 }
 
 function updateCode() {
   if (data) $('code').value = toOpenSCAD(data.profiles, { depth: +$('depth').value, scale: +$('scale').value || 1 });
 }
 
+let dxfText = '';
 function load(text) {
   try {
+    dxfText = text;
     data = parseDxf(text);
     if (!data.profiles.length) throw new Error('No closed profiles found. Shapes must be closed polylines, circles, or connected lines/arcs.');
     build();
@@ -94,6 +97,12 @@ $('wire').addEventListener('change', () => { material.wireframe = $('wire').chec
 $('stl').addEventListener('click', () => { model.updateMatrixWorld(true); save('model.stl', new STLExporter().parse(model)); });
 $('obj').addEventListener('click', () => { model.updateMatrixWorld(true); save('model.obj', new OBJExporter().parse(model)); });
 $('scad').addEventListener('click', () => save('model.scad', $('code').value));
+$('prompt').addEventListener('click', async () => {
+  const msgs = buildMessages(dxfText, +$('depth').value, 'structured');
+  const text = `${msgs[0].content}\n\n${msgs[1].content}`;
+  try { await navigator.clipboard.writeText(text); $('prompt').textContent = 'Copied!'; } catch { $('code').value = text; }
+  setTimeout(() => ($('prompt').textContent = 'Copy LLM prompt'), 1500);
+});
 const drop = $('drop');
 ['dragover', 'dragenter'].forEach((t) => addEventListener(t, (e) => { e.preventDefault(); drop.classList.add('over'); }));
 ['dragleave', 'drop'].forEach((t) => addEventListener(t, (e) => { e.preventDefault(); drop.classList.remove('over'); }));
