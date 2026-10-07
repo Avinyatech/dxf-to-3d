@@ -26,3 +26,19 @@ Pushing to `main` runs `.github/workflows/deploy.yml`, which tests, builds, and 
 SPLINE, 3D entities, blocks/INSERT and text are not converted yet. Planned: revolve mode, per-layer depth, CadQuery code output.
 
 MIT licensed.
+
+## LLM benchmark: 2D CAD to 3D code
+
+Live results: https://avinyatech.github.io/dxf-to-3d/benchmark/ (re-run via the *LLM benchmark (cloud)* workflow; `bench/` has the harness).
+
+Setup: `deepseek-coder-v2:16b` (Ollama, GitHub-hosted CPU runner, ~9 tok/s), 6 DXF drawings x 3 prompt strategies = 18 runs, temperature 0.
+A run passes if the generated OpenSCAD renders and its volume is within 5% and bounding box within 2% of ground truth.
+
+| Prompt strategy | Pass |
+|---|---|
+| raw DXF text | 0/6 |
+| parsed entity JSON | 0/6 |
+| JSON + one worked example (few-shot) | 5/6 |
+
+Takeaways: the model does not reliably produce an extrusion from raw DXF or from JSON alone (flat 2D output, single-face polyhedra, uncalled modules).
+One worked example fixes most of it. Caveats: one model, one run per cell, small suite; treat as a pilot, not a ranking of models.
