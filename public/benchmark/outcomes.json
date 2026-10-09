@@ -17,6 +17,8 @@
           "rendered": false,
           "volErr": null,
           "scad": "scad/raw-dxf__plate_2holes.scad",
+          "iou": null,
+          "strictPass": false,
           "note": "Only flat 2D polygons were written; nothing was extruded, and the holes became separate polygons."
         },
         {
@@ -25,6 +27,8 @@
           "rendered": true,
           "volErr": 0.09850027315968664,
           "scad": "scad/structured__plate_2holes.scad",
+          "iou": null,
+          "strictPass": false,
           "note": "Added the circles to the plate instead of subtracting them, plus an extra circle at the origin."
         },
         {
@@ -33,7 +37,9 @@
           "rendered": true,
           "volErr": 0.00002419128889165336,
           "scad": "scad/fewshot__plate_2holes.scad",
-          "note": "Matches the drawing."
+          "iou": null,
+          "strictPass": false,
+          "note": "Passes the volume and bounding-box checks (overlap with the true solid was not measured in this run)."
         }
       ]
     },
@@ -52,6 +58,8 @@
           "rendered": false,
           "volErr": null,
           "scad": "scad/raw-dxf__washer.scad",
+          "iou": null,
+          "strictPass": false,
           "note": "Two 2D circles only; no extrusion, and the inner circle was shifted in z instead of subtracted."
         },
         {
@@ -60,6 +68,8 @@
           "rendered": true,
           "volErr": 0.8251587054122461,
           "scad": "scad/structured__washer.scad",
+          "iou": null,
+          "strictPass": false,
           "note": "Built two separate cylinders instead of a ring; the inner circle was never cut out of the outer."
         },
         {
@@ -68,7 +78,9 @@
           "rendered": true,
           "volErr": 0.00033740508463287686,
           "scad": "scad/fewshot__washer.scad",
-          "note": "Matches the drawing."
+          "iou": null,
+          "strictPass": false,
+          "note": "Passes the volume and bounding-box checks (overlap with the true solid was not measured in this run)."
         }
       ]
     },
@@ -87,6 +99,8 @@
           "rendered": false,
           "volErr": null,
           "scad": "scad/raw-dxf__l_bracket.scad",
+          "iou": null,
+          "strictPass": false,
           "note": "Extruded, but invented outline points ([15,10], [10,10], [10,0]) that do not match the L shape, so no valid solid."
         },
         {
@@ -95,6 +109,8 @@
           "rendered": false,
           "volErr": null,
           "scad": "scad/structured__l_bracket.scad",
+          "iou": null,
+          "strictPass": false,
           "note": "Passed [x, y, bulge] triples to polygon(), which produces empty geometry, so no solid."
         },
         {
@@ -103,6 +119,8 @@
           "rendered": false,
           "volErr": null,
           "scad": "scad/fewshot__l_bracket.scad",
+          "iou": null,
+          "strictPass": false,
           "note": "Copied the worked example's [x, y, 0] point format into polygon(), which produces empty geometry."
         }
       ]
@@ -122,6 +140,8 @@
           "rendered": false,
           "volErr": null,
           "scad": "scad/raw-dxf__hex_nut.scad",
+          "iou": null,
+          "strictPass": false,
           "note": "Wrong hexagon vertices, 2D only, and modules named polygon/circle that call themselves."
         },
         {
@@ -130,6 +150,8 @@
           "rendered": true,
           "volErr": 0.3568172553096455,
           "scad": "scad/structured__hex_nut.scad",
+          "iou": null,
+          "strictPass": false,
           "note": "Hexagon was close, but the bore circle was subtracted as 2D outside the extrusion, so the hexagon was not cut."
         },
         {
@@ -138,7 +160,9 @@
           "rendered": true,
           "volErr": 0.00008136992617928276,
           "scad": "scad/fewshot__hex_nut.scad",
-          "note": "Matches the drawing."
+          "iou": null,
+          "strictPass": false,
+          "note": "Passes the volume and bounding-box checks (overlap with the true solid was not measured in this run)."
         }
       ]
     },
@@ -157,6 +181,8 @@
           "rendered": false,
           "volErr": null,
           "scad": "scad/raw-dxf__slot_plate.scad",
+          "iou": null,
+          "strictPass": false,
           "note": "Defined an extrude module but never called it; flat 2D shapes, slot not subtracted."
         },
         {
@@ -165,6 +191,8 @@
           "rendered": true,
           "volErr": 0.13412445280951932,
           "scad": "scad/structured__slot_plate.scad",
+          "iou": null,
+          "strictPass": false,
           "note": "Treated the slot as a second, mis-translated rectangle added to the plate instead of a cut."
         },
         {
@@ -173,6 +201,8 @@
           "rendered": true,
           "volErr": 0.02780028535862688,
           "scad": "scad/fewshot__slot_plate.scad",
+          "iou": null,
+          "strictPass": false,
           "note": "Passes within tolerance, but drew the slot as a plain rectangle (the drawing has rounded ends); volume 2.8% off."
         }
       ]
@@ -192,6 +222,8 @@
           "rendered": true,
           "volErr": 0.7046126276667614,
           "scad": "scad/raw-dxf__flange.scad",
+          "iou": null,
+          "strictPass": false,
           "note": "Centred the rectangle on the origin (the drawing is corner-based), added the holes instead of subtracting them, window wrong size."
         },
         {
@@ -200,6 +232,8 @@
           "rendered": false,
           "volErr": null,
           "scad": "scad/structured__flange.scad",
+          "iou": null,
+          "strictPass": false,
           "note": "Built a single-face polyhedron instead of an extrusion; holes left as 2D circles."
         },
         {
@@ -208,7 +242,9 @@
           "rendered": true,
           "volErr": 0.000013111431318901077,
           "scad": "scad/fewshot__flange.scad",
-          "note": "Matches the drawing."
+          "iou": null,
+          "strictPass": false,
+          "note": "Passes the volume and bounding-box checks (overlap with the true solid was not measured in this run)."
         }
       ]
     }

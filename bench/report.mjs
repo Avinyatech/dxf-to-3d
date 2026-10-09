@@ -5,8 +5,8 @@ import { join } from 'node:path';
 const dir = process.argv[2] || 'public/benchmark';
 const s = JSON.parse(readFileSync(join(dir, 'results.json'), 'utf8'));
 const pct = (x) => (x == null ? 'n/a' : (x * 100).toFixed(0) + '%');
-const row = (name, a) => `| ${name} | ${a.passed}/${a.runs} (${pct(a.passRate)}) | ${a.rendered}/${a.runs} | ${pct(a.meanVolErr)} | ${a.meanSeconds.toFixed(0)} s | ${a.tokPerSec ? a.tokPerSec.toFixed(1) : 'n/a'} |`;
-const head = '| | Pass | Rendered | Mean volume error | Mean time | tok/s |\n|---|---|---|---|---|---|';
+const row = (name, a) => `| ${name} | ${a.passed}/${a.runs} (${pct(a.passRate)}) | ${a.strictPassed ?? '-'}/${a.runs} | ${a.meanIou != null ? a.meanIou.toFixed(2) : '-'} | ${a.rendered}/${a.runs} | ${pct(a.meanVolErr)} | ${a.meanSeconds.toFixed(0)} s | ${a.tokPerSec ? a.tokPerSec.toFixed(1) : 'n/a'} |`;
+const head = '| | Pass | Strict pass (IoU >= 0.95) | Mean IoU | Rendered | Mean volume error | Mean time | tok/s |\n|---|---|---|---|---|---|---|---|';
 const lines = [
   `# Benchmark: ${s.model} on 2D CAD to 3D`,
   `Runner: ${s.runner} - ${s.date}`,

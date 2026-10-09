@@ -8,7 +8,7 @@ on:
         description: Ollama model tag
         default: deepseek-coder-v2:16b
       suite:
-        description: base (6 drawings) or engines (inline-3/inline-4 deck faces)
+        description: base (6 drawings), engines (2 deck faces) or complex (14 complicated parts)
         default: base
 permissions:
   contents: write
@@ -48,15 +48,17 @@ jobs:
           XVFB: "1"
         run: |
           OUT=public/benchmark
-          [ "${{ inputs.suite }}" = engines ] && OUT=public/benchmark/engines
+          [ "${{ inputs.suite }}" != base ] && OUT=public/benchmark/${{ inputs.suite }}
           node bench/run.mjs --model "${{ inputs.model }}" --suite "${{ inputs.suite }}" --out "$OUT"
       - name: Build drawing gallery
-        if: inputs.suite == 'base'
-        run: node bench/gallery.mjs public/benchmark
+        run: |
+          OUT=public/benchmark
+          [ "${{ inputs.suite }}" != base ] && OUT=public/benchmark/${{ inputs.suite }}
+          node bench/gallery.mjs "$OUT" "${{ inputs.suite }}"
       - name: Build report
         run: |
           OUT=public/benchmark
-          [ "${{ inputs.suite }}" = engines ] && OUT=public/benchmark/engines
+          [ "${{ inputs.suite }}" != base ] && OUT=public/benchmark/${{ inputs.suite }}
           node bench/report.mjs "$OUT" >> "$GITHUB_STEP_SUMMARY"
       - name: Commit results
         run: |

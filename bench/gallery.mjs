@@ -6,8 +6,14 @@ import { tasks } from './tasks.mjs';
 import { parseDxf } from '../src/pipeline.js';
 import { signedArea } from '../src/geometry.js';
 import { notes } from './notes.mjs';
+import { engines } from './engines.mjs';
+import { complexSuite } from './complex.mjs';
+import { diagnose } from './diagnose.mjs';
+import { existsSync, copyFileSync } from 'node:fs';
 
 const dir = process.argv[2] || 'public/benchmark';
+const suiteName = process.argv[3] || 'base';
+const list = { engines, complex: complexSuite }[suiteName] || tasks;
 mkdirSync(join(dir, 'drawings'), { recursive: true });
 const results = JSON.parse(readFileSync(join(dir, 'results.json'), 'utf8'));
 
@@ -22,18 +28,28 @@ function svg(task) {
 <text transform="translate(${(pad * 0.45).toFixed(2)} ${(H / 2).toFixed(2)}) rotate(-90)">${b.h.toFixed(0)} mm</text></g></svg>\n`;
 }
 
-for (const t of tasks) writeFileSync(join(dir, 'drawings', `${t.id}.svg`), svg(t));
+for (const t of list) writeFileSync(join(dir, 'drawings', `${t.id}.svg`), svg(t));
 
-const outcomes = tasks.map((t) => {
+const outcomes = list.map((t) => {
   const d = parseDxf(t.dxf);
   const solid = d.profiles.reduce((s, p) => s + Math.abs(signedArea(p.outer)) - p.holes.reduce((a, h) => a + Math.abs(signedArea(h)), 0), 0);
   return {
     task: t.id, name: t.name, level: t.level, depth: t.depth, loops: d.loops.length, drawing: `drawings/${t.id}.svg`, expectedVolume: solid * t.depth,
     runs: results.results.filter((r) => r.task === t.id).map((r) => ({
       strategy: r.strategy, pass: !!r.pass, rendered: !!r.rendered, volErr: r.volErr ?? null, scad: r.scad,
-      note: notes[`${r.strategy}/${r.task}`] || (r.pass ? 'Matches the drawing.' : 'Did not match the drawing.'),
+      iou: r.iou ?? null, strictPass: !!r.strictPass,
+      note: (suiteName === 'base' && notes[`${r.strategy}/${r.task}`]) || diagnose(r, r.scad && existsSync(join(dir, r.scad)) ? readFileSync(join(dir, r.scad), 'utf8') : ''),
     })),
   };
 });
 writeFileSync(join(dir, 'outcomes.json'), JSON.stringify({ model: results.model, date: results.date, outcomes }, null, 2));
-console.log(`wrote ${tasks.length} drawings and outcomes.json (${outcomes.reduce((n, o) => n + o.runs.length, 0)} runs)`);
+if (suiteName !== 'base') {
+  const page = readFileSync(new URL('../public/benchmark/index.html', import.meta.url), 'utf8')
+    .replace('<title>LLM CAD Benchmark</title>', `<title>LLM CAD Benchmark: ${suiteName}</title>`)
+    .replace('LLM benchmark: 2D CAD → 3D model code', `LLM benchmark (${suiteName} suite): 2D CAD → 3D model code`)
+    .replace('href="../">← DXF to 3D app', 'href="../">← Benchmark home')
+  const method = '<h2>Method</h2><ul class="muted"><li>Complicated mechanical parts as 2D DXF drawings, each with an extrusion depth. 3 prompt strategies: raw-dxf, structured, fewshot.</li><li><b>Pass</b> = renders, volume within 5% and bounding box within 2%. <b>Strict pass</b> additionally needs overlap (IoU) of at least 0.95 with the exact solid, measured by OpenSCAD intersection.</li><li>Executed on a GitHub-hosted CPU runner via Ollama, 4096-token context. Source: <code>bench/</code>.</li></ul>';
+  const a = page.indexOf('<h2>Method</h2>'), b = page.indexOf('</ul>', a) + '</ul>'.length;
+  writeFileSync(join(dir, 'index.html'), a >= 0 ? page.slice(0, a) + method + page.slice(b) : page);
+}
+console.log(`wrote ${list.length} drawings and outcomes.json (${outcomes.reduce((n, o) => n + o.runs.length, 0)} runs)`);

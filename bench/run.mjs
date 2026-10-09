@@ -4,6 +4,9 @@ import { mkdirSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { tasks as baseTasks } from './tasks.mjs';
 import { engines } from './engines.mjs';
+import { complexSuite } from './complex.mjs';
+import { parseDxf } from '../src/pipeline.js';
+import { toOpenSCAD } from '../src/openscad.js';
 import { groundTruth, measureStl, score } from './score.mjs';
 import { buildMessages, extractCode } from '../src/prompt.js';
 
@@ -12,8 +15,8 @@ const model = arg('model', 'deepseek-coder-v2:16b');
 const host = arg('host', 'http://localhost:11434');
 const out = arg('out', 'public/benchmark');
 const suite = arg('suite', 'base');
-const tasks = suite === 'engines' ? engines : baseTasks;
-const numPredict = +arg('tokens', suite === 'engines' ? 1800 : 900), numCtx = 4096; // larger contexts exhausted runner memory
+const tasks = { engines, complex: complexSuite }[suite] || baseTasks;
+const numPredict = +arg('tokens', suite === 'base' ? 900 : 1800), numCtx = 4096; // larger contexts exhausted runner memory
 const strategies = ['raw-dxf', 'structured', 'fewshot'];
 const openscad = process.env.OPENSCAD || 'openscad';
 mkdirSync(join(out, 'scad'), { recursive: true });
@@ -33,8 +36,33 @@ function render(scadPath, stlPath) {
   const args = ['-o', stlPath, scadPath];
   const cmd = process.env.XVFB ? 'xvfb-run' : openscad;
   const r = spawnSync(cmd, process.env.XVFB ? ['-a', openscad, ...args] : args, { encoding: 'utf8', timeout: 90000 });
-  if (r.status !== 0) return { error: (r.stderr || r.error?.message || 'render failed').slice(0, 400) };
+  if (r.status !== 0) {
+    const text = [r.stderr, r.stdout].filter(Boolean).join('\n'), lines = text.split('\n').filter((l) => /error|warning|unknown|empty|parse/i.test(l));
+    return { error: (lines.slice(0, 3).join(' | ') || r.error?.message || 'render failed').slice(0, 400) };
+  }
   try { return { stl: readFileSync(stlPath, 'utf8') }; } catch { return { error: 'no STL produced (empty geometry?)' }; }
+}
+
+// Truth solid (exact, from the drawing) rendered once per task, for the overlap (IoU) score.
+const truthCache = {};
+function truthStl(task) {
+  if (truthCache[task.id]) return truthCache[task.id];
+  const p = join(out, 'scad', `truth__${task.id}.scad`), s = join(out, 'scad', `truth__${task.id}.stl`);
+  writeFileSync(p, toOpenSCAD(parseDxf(task.dxf).profiles, { depth: task.depth }));
+  const t = render(p, s);
+  return (truthCache[task.id] = t.stl ? measureStl(t.stl) : null);
+}
+function iou(task, base, genVolume) {
+  try { return iouUnsafe(task, base, genVolume); } catch { return null; }
+}
+function iouUnsafe(task, base, genVolume) {
+  const t = truthStl(task);
+  if (!t) return null;
+  const p = join(out, 'scad', `iou__${base}.scad`), s = join(out, 'scad', `iou__${base}.stl`);
+  writeFileSync(p, `intersection() { import("${base}.stl"); import("truth__${task.id}.stl"); }\n`);
+  const x = render(p, s), inter = x.stl ? measureStl(x.stl)?.volume ?? 0 : 0;
+  rmSync(p, { force: true }); rmSync(s, { force: true });
+  return Math.max(0, Math.min(1, inter / (genVolume + t.volume - inter)));
 }
 
 const results = [];
@@ -44,7 +72,7 @@ for (const strategy of strategies) {
     const row = { strategy, task: task.id, level: task.level, truthVolume: truth.volume };
     try {
       const reply = await chat(buildMessages(task.dxf, task.depth, strategy));
-      Object.assign(row, { seconds: reply.seconds, tokens: reply.tokens });
+      Object.assign(row, { seconds: reply.seconds, tokens: reply.tokens, truncated: reply.tokens >= numPredict - 2 });
       const code = extractCode(reply.text);
       const base = `${strategy}__${task.id}`;
       const scadPath = join(out, 'scad', base + '.scad'), stlPath = join(out, 'scad', base + '.stl');
@@ -55,12 +83,15 @@ for (const strategy of strategies) {
       else {
         const m = measureStl(r.stl);
         Object.assign(row, score(truth, m), { volume: m?.volume });
+        row.iou = m ? iou(task, base, m.volume) : null;
+        row.strictPass = !!row.pass && row.iou != null && row.iou >= 0.95;
       }
       rmSync(stlPath, { force: true });
     } catch (e) {
       Object.assign(row, { rendered: false, pass: false, error: String(e.message).slice(0, 400) });
     }
-    console.log(strategy.padEnd(11), task.id.padEnd(13), row.pass ? 'PASS' : 'FAIL', row.volErr != null ? `vol err ${(row.volErr * 100).toFixed(1)}%` : row.error?.split('\n')[0]);
+    row.strictPass = !!row.strictPass;
+    console.log(strategy.padEnd(11), task.id.padEnd(16), row.strictPass ? 'STRICT' : row.pass ? 'PASS' : 'FAIL', row.iou != null ? `iou ${row.iou.toFixed(2)}` : '', row.volErr != null ? `vol err ${(row.volErr * 100).toFixed(1)}%` : row.error?.split('\n')[0]);
     results.push(row);
   }
 }
@@ -70,6 +101,8 @@ const agg = (rows) => ({
   rendered: rows.filter((r) => r.rendered).length,
   passed: rows.filter((r) => r.pass).length,
   passRate: rows.filter((r) => r.pass).length / rows.length,
+  strictPassed: rows.filter((r) => r.strictPass).length,
+  meanIou: rows.reduce((s, r) => s + (r.iou || 0), 0) / rows.length,
   meanVolErr: (() => { const v = rows.filter((r) => r.volErr != null).map((r) => r.volErr); return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null; })(),
   meanSeconds: rows.reduce((s, r) => s + (r.seconds || 0), 0) / rows.length,
   tokPerSec: (() => { const t = rows.filter((r) => r.tokens && r.seconds); return t.length ? t.reduce((s, r) => s + r.tokens, 0) / t.reduce((s, r) => s + r.seconds, 0) : null; })(),
