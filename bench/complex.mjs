@@ -46,7 +46,8 @@ function heatSink() {
 }
 
 function tslot() {
-  const side = [[-10, -10], [-3.1, -10], [-3.1, -8.2], [-5.5, -8.2], [-5.5, -4], [5.5, -4], [5.5, -8.2], [3.1, -8.2], [3.1, -10]];
+  // cavity 9 wide, bottom at 5 mm from the centre, so neighbouring cavities do not overlap
+  const side = [[-10, -10], [-3.1, -10], [-3.1, -8.2], [-4.5, -8.2], [-4.5, -5], [4.5, -5], [4.5, -8.2], [3.1, -8.2], [3.1, -10]];
   const v = [];
   for (let k = 0; k < 4; k++) side.forEach(([x, y]) => { let p = [x, y]; for (let j = 0; j < k; j++) p = [-p[1], p[0]]; v.push(p); });
   return poly(v);

@@ -7,6 +7,9 @@ import { signedArea, pointInPolygon } from '../src/geometry.js';
 
 const ringDist = (A, B) => { let m = Infinity; for (const p of A) for (let i = 0; i < B.length; i++) { const a = B[i], b = B[(i + 1) % B.length], dx = b.x - a.x, dy = b.y - a.y, l2 = dx * dx + dy * dy, t = l2 ? Math.max(0, Math.min(1, ((p.x - a.x) * dx + (p.y - a.y) * dy) / l2)) : 0; m = Math.min(m, Math.hypot(p.x - a.x - t * dx, p.y - a.y - t * dy)); } return m; };
 
+const crosses = (a, b, c, d) => { const o = (p, q, r) => (q.x - p.x) * (r.y - p.y) - (q.y - p.y) * (r.x - p.x); return o(c, d, a) * o(c, d, b) < 0 && o(a, b, c) * o(a, b, d) < 0; };
+const selfIntersections = (ring) => { let n = 0; for (let i = 0; i < ring.length; i++) for (let j = i + 2; j < ring.length; j++) { if (i === 0 && j === ring.length - 1) continue; if (crosses(ring[i], ring[(i + 1) % ring.length], ring[j], ring[(j + 1) % ring.length])) n++; } return n; };
+
 test('at least 14 complicated drawings', () => { assert.ok(complexSuite.length >= 14); });
 
 for (const t of complexSuite) {
@@ -20,6 +23,8 @@ for (const t of complexSuite) {
     const both = [...holes];
     for (let i = 0; i < both.length; i++) for (let j = i + 1; j < both.length; j++) assert.ok(Math.min(ringDist(both[i], both[j]), ringDist(both[j], both[i])) > 0.5, `${t.id} holes ${i},${j} touch`);
     for (const h of holes) assert.ok(ringDist(h, outer) > 0.5, `${t.id} hole too close to outline`);
+    assert.equal(selfIntersections(outer), 0, `${t.id} outline crosses itself`);
+    holes.forEach((h, i) => assert.equal(selfIntersections(h), 0, `${t.id} hole ${i} crosses itself`));
     assert.ok(groundTruth(t).volume > 0);
   });
 }
