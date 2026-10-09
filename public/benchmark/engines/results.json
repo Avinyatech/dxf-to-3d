@@ -1,7 +1,7 @@
 {
   "model": "deepseek-coder-v2:16b",
   "suite": "engines",
-  "date": "2026-10-09T06:53:13.874Z",
+  "date": "2026-10-09T07:28:38.303Z",
   "runner": "GitHub Actions (CPU)",
   "overall": {
     "runs": 6,
@@ -9,8 +9,8 @@
     "passed": 1,
     "passRate": 0.16666666666666666,
     "meanVolErr": 0.04859586953794233,
-    "meanSeconds": 86.64883333333334,
-    "tokPerSec": 8.434427853423685
+    "meanSeconds": 161.43833333333336,
+    "tokPerSec": 8.243601788092459
   },
   "byStrategy": {
     "raw-dxf": {
@@ -19,8 +19,8 @@
       "passed": 0,
       "passRate": 0,
       "meanVolErr": null,
-      "meanSeconds": 60.723,
-      "tokPerSec": 6.900186090937536
+      "meanSeconds": 169.574,
+      "tokPerSec": 7.77831507188602
     },
     "structured": {
       "runs": 2,
@@ -28,8 +28,8 @@
       "passed": 0,
       "passRate": 0,
       "meanVolErr": null,
-      "meanSeconds": 155.861,
-      "tokPerSec": 9.23900141793008
+      "meanSeconds": 162.19,
+      "tokPerSec": 8.878475861643752
     },
     "fewshot": {
       "runs": 2,
@@ -37,8 +37,8 @@
       "passed": 1,
       "passRate": 0.5,
       "meanVolErr": 0.04859586953794233,
-      "meanSeconds": 43.3625,
-      "tokPerSec": 7.690977226866533
+      "meanSeconds": 152.551,
+      "tokPerSec": 8.085820479708426
     }
   },
   "byLevel": {
@@ -48,8 +48,8 @@
       "passed": 1,
       "passRate": 0.16666666666666666,
       "meanVolErr": 0.04859586953794233,
-      "meanSeconds": 86.64883333333334,
-      "tokPerSec": 8.434427853423685
+      "meanSeconds": 161.43833333333336,
+      "tokPerSec": 8.243601788092459
     }
   },
   "results": [
@@ -58,16 +58,19 @@
       "task": "engine_i3",
       "level": "engine",
       "truthVolume": 1164791.0647145775,
+      "seconds": 214.056,
+      "tokens": 1800,
+      "scad": "scad/raw-dxf__engine_i3.scad",
       "rendered": false,
       "pass": false,
-      "error": "fetch failed"
+      "error": "render failed"
     },
     {
       "strategy": "raw-dxf",
       "task": "engine_i4",
       "level": "engine",
       "truthVolume": 1799339.5594113688,
-      "seconds": 121.446,
+      "seconds": 125.092,
       "tokens": 838,
       "scad": "scad/raw-dxf__engine_i4.scad",
       "rendered": false,
@@ -79,7 +82,7 @@
       "task": "engine_i3",
       "level": "engine",
       "truthVolume": 1164791.0647145775,
-      "seconds": 143.013,
+      "seconds": 148.49,
       "tokens": 1415,
       "scad": "scad/structured__engine_i3.scad",
       "rendered": false,
@@ -91,7 +94,7 @@
       "task": "engine_i4",
       "level": "engine",
       "truthVolume": 1799339.5594113688,
-      "seconds": 168.709,
+      "seconds": 175.89,
       "tokens": 1465,
       "scad": "scad/structured__engine_i4.scad",
       "rendered": false,
@@ -103,7 +106,7 @@
       "task": "engine_i3",
       "level": "engine",
       "truthVolume": 1164791.0647145775,
-      "seconds": 86.725,
+      "seconds": 88.709,
       "tokens": 667,
       "scad": "scad/fewshot__engine_i3.scad",
       "rendered": true,
@@ -117,9 +120,12 @@
       "task": "engine_i4",
       "level": "engine",
       "truthVolume": 1799339.5594113688,
+      "seconds": 216.393,
+      "tokens": 1800,
+      "scad": "scad/fewshot__engine_i4.scad",
       "rendered": false,
       "pass": false,
-      "error": "fetch failed"
+      "error": "render failed"
     }
   ]
 }
