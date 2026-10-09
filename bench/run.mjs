@@ -13,7 +13,7 @@ const host = arg('host', 'http://localhost:11434');
 const out = arg('out', 'public/benchmark');
 const suite = arg('suite', 'base');
 const tasks = suite === 'engines' ? engines : baseTasks;
-const numPredict = +arg('tokens', suite === 'engines' ? 3000 : 900), numCtx = suite === 'engines' ? 8192 : 4096;
+const numPredict = +arg('tokens', suite === 'engines' ? 1800 : 900), numCtx = 4096; // larger contexts exhausted runner memory
 const strategies = ['raw-dxf', 'structured', 'fewshot'];
 const openscad = process.env.OPENSCAD || 'openscad';
 mkdirSync(join(out, 'scad'), { recursive: true });
