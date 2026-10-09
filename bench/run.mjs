@@ -2,7 +2,8 @@
 import { spawnSync } from 'node:child_process';
 import { mkdirSync, writeFileSync, readFileSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
-import { tasks } from './tasks.mjs';
+import { tasks as baseTasks } from './tasks.mjs';
+import { engines } from './engines.mjs';
 import { groundTruth, measureStl, score } from './score.mjs';
 import { buildMessages, extractCode } from '../src/prompt.js';
 
@@ -10,6 +11,9 @@ const arg = (k, d) => { const i = process.argv.indexOf('--' + k); return i > 0 ?
 const model = arg('model', 'deepseek-coder-v2:16b');
 const host = arg('host', 'http://localhost:11434');
 const out = arg('out', 'public/benchmark');
+const suite = arg('suite', 'base');
+const tasks = suite === 'engines' ? engines : baseTasks;
+const numPredict = +arg('tokens', suite === 'engines' ? 3000 : 900), numCtx = suite === 'engines' ? 8192 : 4096;
 const strategies = ['raw-dxf', 'structured', 'fewshot'];
 const openscad = process.env.OPENSCAD || 'openscad';
 mkdirSync(join(out, 'scad'), { recursive: true });
@@ -18,7 +22,7 @@ async function chat(messages) {
   const t0 = Date.now();
   const res = await fetch(`${host}/api/chat`, {
     method: 'POST',
-    body: JSON.stringify({ model, messages, stream: false, options: { temperature: 0, seed: 1, num_predict: 900, num_ctx: 4096 } }),
+    body: JSON.stringify({ model, messages, stream: false, options: { temperature: 0, seed: 1, num_predict: numPredict, num_ctx: numCtx } }),
   });
   if (!res.ok) throw new Error(`ollama ${res.status}: ${await res.text()}`);
   const j = await res.json();
@@ -71,10 +75,10 @@ const agg = (rows) => ({
   tokPerSec: (() => { const t = rows.filter((r) => r.tokens && r.seconds); return t.length ? t.reduce((s, r) => s + r.tokens, 0) / t.reduce((s, r) => s + r.seconds, 0) : null; })(),
 });
 const summary = {
-  model, date: new Date().toISOString(), runner: process.env.RUNNER_NAME ? 'GitHub Actions (CPU)' : 'local',
+  model, suite, date: new Date().toISOString(), runner: process.env.RUNNER_NAME ? 'GitHub Actions (CPU)' : 'local',
   overall: agg(results),
   byStrategy: Object.fromEntries(strategies.map((s) => [s, agg(results.filter((r) => r.strategy === s))])),
-  byLevel: Object.fromEntries(['easy', 'medium', 'hard'].map((l) => [l, agg(results.filter((r) => r.level === l))])),
+  byLevel: Object.fromEntries([...new Set(tasks.map((t) => t.level))].map((l) => [l, agg(results.filter((r) => r.level === l))])),
   results,
 };
 writeFileSync(join(out, 'results.json'), JSON.stringify(summary, null, 2));
