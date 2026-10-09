@@ -42,3 +42,16 @@ A run passes if the generated OpenSCAD renders and its volume is within 5% and b
 
 Takeaways: the model does not reliably produce an extrusion from raw DXF or from JSON alone (flat 2D output, single-face polyhedra, uncalled modules).
 One worked example fixes most of it. Caveats: one model, one run per cell, small suite; treat as a pilot, not a ranking of models.
+
+### Engine stress test (inline-3 and inline-4 block deck faces)
+`bench/engines.mjs` generates representative engine-block deck-face drawings (20 and 25 closed loops: bores, head-bolt holes, coolant slots, oil returns, dowels, rounded corners; typical small-engine dimensions, not a specific manufacturer's drawing).
+Run: `gh workflow run benchmark.yml -f suite=engines`; results land in `public/benchmark/engines/`.
+
+| Prompt strategy | inline-3 (20 loops) | inline-4 (25 loops) |
+|---|---|---|
+| raw DXF text | FAIL (no solid) | FAIL (no solid) |
+| parsed entity JSON | FAIL (no solid) | FAIL (no solid) |
+| JSON + worked example | PASS, borderline (4.9% volume error; slots merged into the outline) | FAIL (no solid) |
+
+1 of 6 passed, and that pass is within tolerance only because the benchmark allows 5% volume error. The model copied wrong numbers, invented OpenSCAD functions and misread bulge values.
+Only the flat deck face is a valid 2D-to-3D extrusion target; real engines are mostly non-prismatic.
