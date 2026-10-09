@@ -43,6 +43,8 @@ jobs:
         env:
           XVFB: "1"
         run: node bench/run.mjs --model "${{ inputs.model }}" --out public/benchmark
+      - name: Build drawing gallery
+        run: node bench/gallery.mjs public/benchmark
       - name: Build report
         run: node bench/report.mjs public/benchmark >> "$GITHUB_STEP_SUMMARY"
       - name: Commit results

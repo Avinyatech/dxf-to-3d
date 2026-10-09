@@ -18,6 +18,13 @@ th { color:var(--muted); font-weight:600; }
 .pass { color:var(--ok); font-weight:600; } .fail { color:var(--bad); font-weight:600; }
 a { color:var(--accent); }
 .scroll { overflow-x:auto; }
+.gal { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:14px; margin-top:12px; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px; }
+.card img { width:100%; height:150px; object-fit:contain; background:#fff; border-radius:6px; border:1px solid var(--line); }
+.card h3 { margin:8px 0 2px; font-size:15px; } .card .sub { color:var(--muted); font-size:12px; margin-bottom:6px; }
+.run { border-top:1px solid var(--line); padding:6px 0; font-size:13px; } .run b { display:inline-block; min-width:78px; }
+.run .note { color:var(--muted); font-size:12px; display:block; margin-top:2px; }
+.pill { font-size:11px; font-weight:700; padding:1px 7px; border-radius:999px; color:#fff; background:var(--bad); } .pill.ok { background:var(--ok); }
 </style>
 </head>
 <body>
@@ -26,6 +33,9 @@ a { color:var(--accent); }
   <h1>LLM benchmark: 2D CAD → 3D model code</h1>
   <p id="meta" class="muted">Loading…</p>
   <div id="out"></div>
+  <h2>The 2D drawings and what the model produced</h2>
+  <p class="muted">Each card is one input drawing (DXF). The three rows are the three prompt strategies; the note explains, from reading the generated OpenSCAD, why a run failed.</p>
+  <div id="gallery" class="gal"></div>
   <h2>Method</h2>
   <ul class="muted">
     <li>6 DXF drawings (easy to hard: holes, nested loops, bulge arcs, rectangular windows), each with an extrusion depth.</li>
@@ -45,6 +55,9 @@ fetch('results.json').then((r) => { if (!r.ok) throw 0; return r.json(); }).then
   document.getElementById('out').innerHTML = table('By prompt strategy', s.byStrategy) + table('By difficulty', s.byLevel) +
     `<h2>Every run</h2><div class="scroll"><table><tr><th>Strategy</th><th>Task</th><th>Result</th><th>Vol. error</th><th>Generated code</th><th>Note</th></tr>${s.results.map((r) => `<tr><td>${esc(r.strategy)}</td><td>${esc(r.task)}</td><td class="${r.pass ? 'pass' : 'fail'}">${r.pass ? 'PASS' : 'FAIL'}</td><td>${r.volErr != null ? (r.volErr * 100).toFixed(1) + '%' : '-'}</td><td>${r.scad ? `<a href="${esc(r.scad)}">.scad</a>` : '-'}</td><td class="muted">${esc((r.error || '').split('\n')[0].slice(0, 90))}</td></tr>`).join('')}</table></div>`;
 }).catch(() => { document.getElementById('meta').textContent = 'No results yet. The benchmark workflow has not completed.'; });
+fetch('outcomes.json').then((r) => { if (!r.ok) throw 0; return r.json(); }).then((o) => {
+  document.getElementById('gallery').innerHTML = o.outcomes.map((t) => `<div class="card"><img src="${esc(t.drawing)}" alt="${esc(t.name)}" /><h3>${esc(t.name)}</h3><div class="sub">${esc(t.level)} · ${t.loops} closed loops · extrude ${t.depth} mm</div>${t.runs.map((r) => `<div class="run"><b>${esc(r.strategy)}</b><span class="pill ${r.pass ? 'ok' : ''}">${r.pass ? 'PASS' : 'FAIL'}</span>${r.volErr != null ? ' vol. error ' + (r.volErr * 100).toFixed(1) + '%' : ''} ${r.scad ? '<a href="' + esc(r.scad) + '">code</a>' : ''}<span class="note">${esc(r.note)}</span></div>`).join('')}</div>`).join('');
+}).catch(() => {});
 </script>
 </body>
 </html>

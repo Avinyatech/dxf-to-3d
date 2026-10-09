@@ -1,0 +1,216 @@
+{
+  "model": "deepseek-coder-v2:16b",
+  "date": "2026-10-07T17:11:14.614Z",
+  "outcomes": [
+    {
+      "task": "plate_2holes",
+      "name": "Plate with two holes",
+      "level": "easy",
+      "depth": 10,
+      "loops": 3,
+      "drawing": "drawings/plate_2holes.svg",
+      "expectedVolume": 55983.8633741879,
+      "runs": [
+        {
+          "strategy": "raw-dxf",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/raw-dxf__plate_2holes.scad",
+          "note": "Only flat 2D polygons were written; nothing was extruded, and the holes became separate polygons."
+        },
+        {
+          "strategy": "structured",
+          "pass": false,
+          "rendered": true,
+          "volErr": 0.09850027315968664,
+          "scad": "scad/structured__plate_2holes.scad",
+          "note": "Added the circles to the plate instead of subtracting them, plus an extra circle at the origin."
+        },
+        {
+          "strategy": "fewshot",
+          "pass": true,
+          "rendered": true,
+          "volErr": 0.00002419128889165336,
+          "scad": "scad/fewshot__plate_2holes.scad",
+          "note": "Matches the drawing."
+        }
+      ]
+    },
+    {
+      "task": "washer",
+      "name": "Washer (circle in circle)",
+      "level": "easy",
+      "depth": 3,
+      "loops": 2,
+      "drawing": "drawings/washer.svg",
+      "expectedVolume": 3002.6896491423176,
+      "runs": [
+        {
+          "strategy": "raw-dxf",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/raw-dxf__washer.scad",
+          "note": "Two 2D circles only; no extrusion, and the inner circle was shifted in z instead of subtracted."
+        },
+        {
+          "strategy": "structured",
+          "pass": false,
+          "rendered": true,
+          "volErr": 0.8251587054122461,
+          "scad": "scad/structured__washer.scad",
+          "note": "Built two separate cylinders instead of a ring; the inner circle was never cut out of the outer."
+        },
+        {
+          "strategy": "fewshot",
+          "pass": true,
+          "rendered": true,
+          "volErr": 0.00033740508463287686,
+          "scad": "scad/fewshot__washer.scad",
+          "note": "Matches the drawing."
+        }
+      ]
+    },
+    {
+      "task": "l_bracket",
+      "name": "L-bracket polygon",
+      "level": "medium",
+      "depth": 8,
+      "loops": 1,
+      "drawing": "drawings/l_bracket.svg",
+      "expectedVolume": 15000,
+      "runs": [
+        {
+          "strategy": "raw-dxf",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/raw-dxf__l_bracket.scad",
+          "note": "Extruded, but invented outline points ([15,10], [10,10], [10,0]) that do not match the L shape, so no valid solid."
+        },
+        {
+          "strategy": "structured",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/structured__l_bracket.scad",
+          "note": "Passed [x, y, bulge] triples to polygon(), which produces empty geometry, so no solid."
+        },
+        {
+          "strategy": "fewshot",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/fewshot__l_bracket.scad",
+          "note": "Copied the worked example's [x, y, 0] point format into polygon(), which produces empty geometry."
+        }
+      ]
+    },
+    {
+      "task": "hex_nut",
+      "name": "Hex nut",
+      "level": "medium",
+      "depth": 10,
+      "loops": 2,
+      "drawing": "drawings/hex_nut.svg",
+      "expectedVolume": 4308.244147931308,
+      "runs": [
+        {
+          "strategy": "raw-dxf",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/raw-dxf__hex_nut.scad",
+          "note": "Wrong hexagon vertices, 2D only, and modules named polygon/circle that call themselves."
+        },
+        {
+          "strategy": "structured",
+          "pass": false,
+          "rendered": true,
+          "volErr": 0.3568172553096455,
+          "scad": "scad/structured__hex_nut.scad",
+          "note": "Hexagon was close, but the bore circle was subtracted as 2D outside the extrusion, so the hexagon was not cut."
+        },
+        {
+          "strategy": "fewshot",
+          "pass": true,
+          "rendered": true,
+          "volErr": 0.00008136992617928276,
+          "scad": "scad/fewshot__hex_nut.scad",
+          "note": "Matches the drawing."
+        }
+      ]
+    },
+    {
+      "task": "slot_plate",
+      "name": "Plate with bulge-arc slot",
+      "level": "hard",
+      "depth": 6,
+      "loops": 2,
+      "drawing": "drawings/slot_plate.svg",
+      "expectedVolume": 16929.358989162643,
+      "runs": [
+        {
+          "strategy": "raw-dxf",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/raw-dxf__slot_plate.scad",
+          "note": "Defined an extrude module but never called it; flat 2D shapes, slot not subtracted."
+        },
+        {
+          "strategy": "structured",
+          "pass": false,
+          "rendered": true,
+          "volErr": 0.13412445280951932,
+          "scad": "scad/structured__slot_plate.scad",
+          "note": "Treated the slot as a second, mis-translated rectangle added to the plate instead of a cut."
+        },
+        {
+          "strategy": "fewshot",
+          "pass": true,
+          "rendered": true,
+          "volErr": 0.02780028535862688,
+          "scad": "scad/fewshot__slot_plate.scad",
+          "note": "Passes within tolerance, but drew the slot as a plain rectangle (the drawing has rounded ends); volume 2.8% off."
+        }
+      ]
+    },
+    {
+      "task": "flange",
+      "name": "Flange: 4 holes + rectangular window",
+      "level": "hard",
+      "depth": 12,
+      "loops": 6,
+      "drawing": "drawings/flange.svg",
+      "expectedVolume": 97034.87191330118,
+      "runs": [
+        {
+          "strategy": "raw-dxf",
+          "pass": false,
+          "rendered": true,
+          "volErr": 0.7046126276667614,
+          "scad": "scad/raw-dxf__flange.scad",
+          "note": "Centred the rectangle on the origin (the drawing is corner-based), added the holes instead of subtracting them, window wrong size."
+        },
+        {
+          "strategy": "structured",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/structured__flange.scad",
+          "note": "Built a single-face polyhedron instead of an extrusion; holes left as 2D circles."
+        },
+        {
+          "strategy": "fewshot",
+          "pass": true,
+          "rendered": true,
+          "volErr": 0.000013111431318901077,
+          "scad": "scad/fewshot__flange.scad",
+          "note": "Matches the drawing."
+        }
+      ]
+    }
+  ]
+}
