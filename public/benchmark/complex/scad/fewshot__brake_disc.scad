@@ -1,0 +1,46 @@
+linear_extrude(height = 10)
+  union() {
+    circle(r = 140, $fn = 64);
+    circle(r = 30, $fn = 64);
+    translate([50, 0]) circle(r = 8, $fn = 64);
+    translate([15.451, 47.553]) circle(r = 8, $fn = 64);
+    translate([-40.451, 29.389]) circle(r = 8, $fn = 64);
+    translate([-40.451, -29.389]) circle(r = 8, $fn = 64);
+    translate([15.451, -47.553]) circle(r = 8, $fn = 64);
+    translate([85, 0]) circle(r = 5, $fn = 64);
+    translate([79.874, 29.072]) circle(r = 5, $fn = 64);
+    translate([65.114, 54.637]) circle(r = 5, $fn = 64);
+    translate([42.5, 73.612]) circle(r = 5, $fn = 64);
+    translate([14.76, 83.709]) circle(r = 5, $fn = 64);
+    translate([-14.76, 83.709]) circle(r = 5, $fn = 64);
+    translate([-42.5, 73.612]) circle(r = 5, $fn = 64);
+    translate([-65.114, 54.637]) circle(r = 5, $fn = 64);
+    translate([-79.874, 29.072]) circle(r = 5, $fn = 64);
+    translate([-85, 0]) circle(r = 5, $fn = 64);
+    translate([-79.874, -29.072]) circle(r = 5, $fn = 64);
+    translate([-65.114, -54.637]) circle(r = 5, $fn = 64);
+    translate([-42.5, -73.612]) circle(r = 5, $fn = 64);
+    translate([-14.76, -83.709]) circle(r = 5, $fn = 64);
+    translate([14.76, -83.709]) circle(r = 5, $fn = 64);
+    translate([42.5, -73.612]) circle(r = 5, $fn = 64);
+    translate([65.114, -54.637]) circle(r = 5, $fn = 64);
+    translate([79.874, -29.072]) circle(r = 5, $fn = 64);
+    translate([108.329, 19.101]) circle(r = 5, $fn = 64);
+    translate([95.263, 55]) circle(r = 5, $fn = 64);
+    translate([70.707, 84.265]) circle(r = 5, $fn = 64);
+    translate([37.622, 103.366]) circle(r = 5, $fn = 64);
+    translate([0, 110]) circle(r = 5, $fn = 64);
+    translate([-37.622, 103.366]) circle(r = 5, $fn = 64);
+    translate([-70.707, 84.265]) circle(r = 5, $fn = 64);
+    translate([-95.263, 55]) circle(r = 5, $fn = 64);
+    translate([-108.329, 19.101]) circle(r = 5, $fn = 64);
+    translate([-108.329, -19.101]) circle(r = 5, $fn = 64);
+    translate([-95.263, -55]) circle(r = 5, $fn = 64);
+    translate([-70.707, -84.265]) circle(r = 5, $fn = 64);
+    translate([-37.622, -103.366]) circle(r = 5, $fn = 64);
+    translate([0, -110]) circle(r = 5, $fn = 64);
+    translate([37.622, -103.366]) circle(r = 5, $fn = 64);
+    translate([70.707, -84.265]) circle(r = 5, $fn = 64);
+    translate([95.263, -55]) circle(r = 5, $fn = 64);
+    translate([108.329, -19.101]) circle(r = 5, $fn = 64);
+  }

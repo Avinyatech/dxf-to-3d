@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>LLM CAD Benchmark: complex</title>
+<style>
+:root { --bg:#f6f7f9; --card:#fff; --ink:#1b1f24; --muted:#6a737d; --line:#d8dde3; --ok:#15803d; --bad:#b91c1c; --accent:#2563eb; }
+@media (prefers-color-scheme: dark) { :root { --bg:#14171b; --card:#1c2026; --ink:#e6e9ed; --muted:#97a0ab; --line:#2c333b; --ok:#4ade80; --bad:#f87171; --accent:#5b9bff; } }
+body { margin:0; background:var(--bg); color:var(--ink); font:15px/1.5 system-ui,sans-serif; }
+main { max-width:900px; margin:0 auto; padding:24px 16px 48px; }
+h1 { margin:0 0 4px; } h2 { margin-top:32px; }
+.muted { color:var(--muted); }
+table { width:100%; border-collapse:collapse; background:var(--card); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+th, td { padding:8px 10px; text-align:left; border-bottom:1px solid var(--line); font-size:14px; }
+th { color:var(--muted); font-weight:600; }
+.bar { height:8px; background:var(--line); border-radius:4px; overflow:hidden; min-width:80px; } .bar i { display:block; height:100%; background:var(--accent); }
+.pass { color:var(--ok); font-weight:600; } .fail { color:var(--bad); font-weight:600; }
+a { color:var(--accent); }
+.scroll { overflow-x:auto; }
+.gal { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:14px; margin-top:12px; }
+.card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px; }
+.card img { width:100%; height:150px; object-fit:contain; background:#fff; border-radius:6px; border:1px solid var(--line); }
+.card h3 { margin:8px 0 2px; font-size:15px; } .card .sub { color:var(--muted); font-size:12px; margin-bottom:6px; }
+.run { border-top:1px solid var(--line); padding:6px 0; font-size:13px; } .run b { display:inline-block; min-width:78px; }
+.run .note { color:var(--muted); font-size:12px; display:block; margin-top:2px; }
+.pill { font-size:11px; font-weight:700; padding:1px 7px; border-radius:999px; color:#fff; background:var(--bad); } .pill.ok { background:var(--ok); }
+</style>
+</head>
+<body>
+<main>
+  <p><a href="../">← Benchmark home</a></p>
+  <h1>LLM benchmark (complex suite): 2D CAD → 3D model code</h1>
+  <p id="meta" class="muted">Loading…</p>
+  <div id="out"></div>
+  <h2>The 2D drawings and what the model produced</h2>
+  <p class="muted">Each card is one input drawing (DXF). The three rows are the three prompt strategies; the note explains, from reading the generated OpenSCAD, why a run failed.</p>
+  <div id="gallery" class="gal"></div>
+  <h2>Method</h2><ul class="muted"><li>Complicated mechanical parts as 2D DXF drawings, each with an extrusion depth. 3 prompt strategies: raw-dxf, structured, fewshot.</li><li><b>Pass</b> = renders, volume within 5% and bounding box within 2%. <b>Strict pass</b> additionally needs overlap (IoU) of at least 0.95 with the exact solid, measured by OpenSCAD intersection.</li><li>Executed on a GitHub-hosted CPU runner via Ollama, 4096-token context. Source: <code>bench/</code>.</li></ul>
+</main>
+<script>
+const pct = (x) => (x == null ? 'n/a' : (x * 100).toFixed(0) + '%');
+const esc = (s) => String(s ?? '').replace(/[&<>]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+const agg = (name, a) => `<tr><td>${esc(name)}</td><td><div class="bar"><i style="width:${a.passRate * 100}%"></i></div></td><td>${a.passed}/${a.runs} (${pct(a.passRate)})</td><td>${a.rendered}/${a.runs}</td><td>${pct(a.meanVolErr)}</td><td>${a.meanSeconds.toFixed(0)} s</td></tr>`;
+const table = (title, obj) => `<h2>${title}</h2><div class="scroll"><table><tr><th></th><th></th><th>Pass</th><th>Rendered</th><th>Mean volume error</th><th>Mean time</th></tr>${Object.entries(obj).map(([k, v]) => agg(k, v)).join('')}</table></div>`;
+fetch('results.json').then((r) => { if (!r.ok) throw 0; return r.json(); }).then((s) => {
+  document.getElementById('meta').textContent = `${s.model} · ${s.runner} · ${s.date.slice(0, 10)} · overall pass rate ${pct(s.overall.passRate)}`;
+  document.getElementById('out').innerHTML = table('By prompt strategy', s.byStrategy) + table('By difficulty', s.byLevel) +
+    `<h2>Every run</h2><div class="scroll"><table><tr><th>Strategy</th><th>Task</th><th>Result</th><th>Vol. error</th><th>Generated code</th><th>Note</th></tr>${s.results.map((r) => `<tr><td>${esc(r.strategy)}</td><td>${esc(r.task)}</td><td class="${r.pass ? 'pass' : 'fail'}">${r.pass ? 'PASS' : 'FAIL'}</td><td>${r.volErr != null ? (r.volErr * 100).toFixed(1) + '%' : '-'}</td><td>${r.scad ? `<a href="${esc(r.scad)}">.scad</a>` : '-'}</td><td class="muted">${esc((r.error || '').split('\n')[0].slice(0, 90))}</td></tr>`).join('')}</table></div>`;
+}).catch(() => { document.getElementById('meta').textContent = 'No results yet. The benchmark workflow has not completed.'; });
+fetch('outcomes.json').then((r) => { if (!r.ok) throw 0; return r.json(); }).then((o) => {
+  document.getElementById('gallery').innerHTML = o.outcomes.map((t) => `<div class="card"><img src="${esc(t.drawing)}" alt="${esc(t.name)}" /><h3>${esc(t.name)}</h3><div class="sub">${esc(t.level)} · ${t.loops} closed loops · extrude ${t.depth} mm</div>${t.runs.map((r) => `<div class="run"><b>${esc(r.strategy)}</b><span class="pill ${r.pass ? 'ok' : ''}">${r.pass ? 'PASS' : 'FAIL'}</span>${r.volErr != null ? ' vol. error ' + (r.volErr * 100).toFixed(1) + '%' : ''} ${r.scad ? '<a href="' + esc(r.scad) + '">code</a>' : ''}<span class="note">${esc(r.note)}</span></div>`).join('')}</div>`).join('');
+}).catch(() => {});
+</script>
+</body>
+</html>

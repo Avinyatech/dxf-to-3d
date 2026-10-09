@@ -1,0 +1,579 @@
+{
+  "model": "deepseek-coder-v2:16b",
+  "date": "2026-10-09T10:01:15.210Z",
+  "outcomes": [
+    {
+      "task": "gear_24t",
+      "name": "Spur gear, 24 teeth, bore and 6 lightening holes",
+      "level": "complex",
+      "depth": 12,
+      "loops": 8,
+      "drawing": "drawings/gear_24t.svg",
+      "expectedVolume": 37901.85379117291,
+      "runs": [
+        {
+          "strategy": "raw-dxf",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "iou": null,
+          "strictPass": false,
+          "note": "Model server error (not a model failure)."
+        },
+        {
+          "strategy": "structured",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/structured__gear_24t.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "OpenSCAD syntax error."
+        },
+        {
+          "strategy": "fewshot",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/fewshot__gear_24t.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "OpenSCAD syntax error."
+        }
+      ]
+    },
+    {
+      "task": "sprocket_18t",
+      "name": "Chain sprocket, 18 teeth, bore and 5 holes",
+      "level": "complex",
+      "depth": 8,
+      "loops": 7,
+      "drawing": "drawings/sprocket_18t.svg",
+      "expectedVolume": 65758.39462334545,
+      "runs": [
+        {
+          "strategy": "raw-dxf",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/raw-dxf__sprocket_18t.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "OpenSCAD syntax error."
+        },
+        {
+          "strategy": "structured",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/structured__sprocket_18t.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "The answer was cut off at the token limit before the code was complete."
+        },
+        {
+          "strategy": "fewshot",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/fewshot__sprocket_18t.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "OpenSCAD syntax error."
+        }
+      ]
+    },
+    {
+      "task": "flange_8bolt",
+      "name": "Round flange: 8 bolts on a circle, 4 dowels, bore",
+      "level": "complex",
+      "depth": 15,
+      "loops": 14,
+      "drawing": "drawings/flange_8bolt.svg",
+      "expectedVolume": 318718.092539056,
+      "runs": [
+        {
+          "strategy": "raw-dxf",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/raw-dxf__flange_8bolt.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "OpenSCAD syntax error."
+        },
+        {
+          "strategy": "structured",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/structured__flange_8bolt.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "Calls an OpenSCAD function or module that does not exist."
+        },
+        {
+          "strategy": "fewshot",
+          "pass": false,
+          "rendered": true,
+          "volErr": 0.19569803813707473,
+          "scad": "scad/fewshot__flange_8bolt.scad",
+          "iou": 0.8352860068764159,
+          "strictPass": false,
+          "note": "Renders, but the geometry is wrong: volume 20% off, overlap 84%."
+        }
+      ]
+    },
+    {
+      "task": "brake_disc",
+      "name": "Brake disc: 5 lugs, 36 cross-drilled holes in 2 rings",
+      "level": "complex",
+      "depth": 10,
+      "loops": 43,
+      "drawing": "drawings/brake_disc.svg",
+      "expectedVolume": 548453.6579624633,
+      "runs": [
+        {
+          "strategy": "raw-dxf",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/raw-dxf__brake_disc.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "The answer was cut off at the token limit before the code was complete."
+        },
+        {
+          "strategy": "structured",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/structured__brake_disc.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "The answer was cut off at the token limit before the code was complete."
+        },
+        {
+          "strategy": "fewshot",
+          "pass": false,
+          "rendered": true,
+          "volErr": 0.12090359141715287,
+          "scad": "scad/fewshot__brake_disc.scad",
+          "iou": 0.8910605549947804,
+          "strictPass": false,
+          "note": "Renders, but the geometry is wrong: volume 12% off, overlap 89%."
+        }
+      ]
+    },
+    {
+      "task": "heat_sink",
+      "name": "Heat sink: 12 fins on a base, 2 mounting holes",
+      "level": "complex",
+      "depth": 25,
+      "loops": 3,
+      "drawing": "drawings/heat_sink.svg",
+      "expectedVolume": 46019.497894088854,
+      "runs": [
+        {
+          "strategy": "raw-dxf",
+          "pass": false,
+          "rendered": true,
+          "volErr": 0.7237945400451579,
+          "scad": "scad/raw-dxf__heat_sink.scad",
+          "iou": 0.36897807733990834,
+          "strictPass": false,
+          "note": "Renders, but the geometry is wrong: volume 72% off, overlap 37%."
+        },
+        {
+          "strategy": "structured",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/structured__heat_sink.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "OpenSCAD could not produce a solid from this code."
+        },
+        {
+          "strategy": "fewshot",
+          "pass": true,
+          "rendered": true,
+          "volErr": 0.000007115890734832455,
+          "scad": "scad/fewshot__heat_sink.scad",
+          "iou": 0.9999829117165154,
+          "strictPass": true,
+          "note": "Matches the drawing (overlap with the true solid is 95% or more)."
+        }
+      ]
+    },
+    {
+      "task": "conrod",
+      "name": "Connecting rod: tangent-arc body, 2 bores, lightening slot",
+      "level": "complex",
+      "depth": 20,
+      "loops": 4,
+      "drawing": "drawings/conrod.svg",
+      "expectedVolume": 125412.61487062613,
+      "runs": [
+        {
+          "strategy": "raw-dxf",
+          "pass": false,
+          "rendered": true,
+          "volErr": 0.08176065174904106,
+          "scad": "scad/raw-dxf__conrod.scad",
+          "iou": 0.710456763934482,
+          "strictPass": false,
+          "note": "Renders, but the geometry is wrong: volume 8% off, overlap 71%."
+        },
+        {
+          "strategy": "structured",
+          "pass": false,
+          "rendered": true,
+          "volErr": 0.7190196318933985,
+          "scad": "scad/structured__conrod.scad",
+          "iou": 0.000009914206244465894,
+          "strictPass": false,
+          "note": "Renders, but the geometry is wrong: volume 72% off, overlap 0%."
+        },
+        {
+          "strategy": "fewshot",
+          "pass": false,
+          "rendered": true,
+          "volErr": 0.12724840508148835,
+          "scad": "scad/fewshot__conrod.scad",
+          "iou": 0.8576980086695641,
+          "strictPass": false,
+          "note": "Renders, but the geometry is wrong: volume 13% off, overlap 86%."
+        }
+      ]
+    },
+    {
+      "task": "cam_plate",
+      "name": "Cam plate: 120-point profile, bore, 2 holes",
+      "level": "complex",
+      "depth": 15,
+      "loops": 4,
+      "drawing": "drawings/cam_plate.svg",
+      "expectedVolume": 47567.9140700602,
+      "runs": [
+        {
+          "strategy": "raw-dxf",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/raw-dxf__cam_plate.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "OpenSCAD syntax error."
+        },
+        {
+          "strategy": "structured",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/structured__cam_plate.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "No 3D operation: flat 2D shapes only, nothing extruded."
+        },
+        {
+          "strategy": "fewshot",
+          "pass": false,
+          "rendered": true,
+          "volErr": 0.6108716922387605,
+          "scad": "scad/fewshot__cam_plate.scad",
+          "iou": 0.3890882691785449,
+          "strictPass": false,
+          "note": "Renders, but the geometry is wrong: volume 61% off, overlap 39%."
+        }
+      ]
+    },
+    {
+      "task": "wheel_5spoke",
+      "name": "Wheel: rim, 5 spoke windows with arcs, hub bore, 5 lugs",
+      "level": "complex",
+      "depth": 8,
+      "loops": 12,
+      "drawing": "drawings/wheel_5spoke.svg",
+      "expectedVolume": 235422.096153719,
+      "runs": [
+        {
+          "strategy": "raw-dxf",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/raw-dxf__wheel_5spoke.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "OpenSCAD syntax error."
+        },
+        {
+          "strategy": "structured",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/structured__wheel_5spoke.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "OpenSCAD syntax error."
+        },
+        {
+          "strategy": "fewshot",
+          "pass": false,
+          "rendered": true,
+          "volErr": 0.5348210934405626,
+          "scad": "scad/fewshot__wheel_5spoke.scad",
+          "iou": 0.6506034418372881,
+          "strictPass": false,
+          "note": "Renders, but the geometry is wrong: volume 53% off, overlap 65%."
+        }
+      ]
+    },
+    {
+      "task": "tslot_2020",
+      "name": "T-slot aluminium extrusion profile 20 x 20",
+      "level": "complex",
+      "depth": 40,
+      "loops": 2,
+      "drawing": "drawings/tslot_2020.svg",
+      "expectedVolume": 9052.926171255272,
+      "runs": [
+        {
+          "strategy": "raw-dxf",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/raw-dxf__tslot_2020.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "Produced empty geometry, so there was nothing to export (for example a polygon given 3-value points)."
+        },
+        {
+          "strategy": "structured",
+          "pass": false,
+          "rendered": true,
+          "volErr": 0.9466799018287244,
+          "scad": "scad/structured__tslot_2020.scad",
+          "iou": 0,
+          "strictPass": false,
+          "note": "Renders, but the geometry is wrong: volume 95% off, overlap 0%."
+        },
+        {
+          "strategy": "fewshot",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/fewshot__tslot_2020.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "The answer was cut off at the token limit before the code was complete."
+        }
+      ]
+    },
+    {
+      "task": "pegboard",
+      "name": "Perforated board: 40 grid holes and 4 corner holes",
+      "level": "complex",
+      "depth": 3,
+      "loops": 45,
+      "drawing": "drawings/pegboard.svg",
+      "expectedVolume": 22436.933533478972,
+      "runs": [
+        {
+          "strategy": "raw-dxf",
+          "pass": false,
+          "rendered": true,
+          "volErr": 0.5056229907926452,
+          "scad": "scad/raw-dxf__pegboard.scad",
+          "iou": 0.04751672177203612,
+          "strictPass": false,
+          "note": "Renders, but the geometry is wrong: volume 51% off, overlap 5%."
+        },
+        {
+          "strategy": "structured",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/structured__pegboard.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "OpenSCAD could not produce a solid from this code."
+        },
+        {
+          "strategy": "fewshot",
+          "pass": true,
+          "rendered": true,
+          "volErr": 0.00009482242138555241,
+          "scad": "scad/fewshot__pegboard.scad",
+          "iou": 0,
+          "strictPass": false,
+          "note": "Within the 5% volume tolerance, but the shape differs from the drawing (overlap 0%)."
+        }
+      ]
+    },
+    {
+      "task": "gusset_bracket",
+      "name": "Gusset bracket: concave outline, 5 holes, vertical slot",
+      "level": "complex",
+      "depth": 8,
+      "loops": 7,
+      "drawing": "drawings/gusset_bracket.svg",
+      "expectedVolume": 36806.68728370503,
+      "runs": [
+        {
+          "strategy": "raw-dxf",
+          "pass": false,
+          "rendered": true,
+          "volErr": 0.10666493155843337,
+          "scad": "scad/raw-dxf__gusset_bracket.scad",
+          "iou": 0.6802321473513245,
+          "strictPass": false,
+          "note": "Renders, but the geometry is wrong: volume 11% off, overlap 68%."
+        },
+        {
+          "strategy": "structured",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/structured__gusset_bracket.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "OpenSCAD syntax error."
+        },
+        {
+          "strategy": "fewshot",
+          "pass": true,
+          "rendered": true,
+          "volErr": 0.017073809069937065,
+          "scad": "scad/fewshot__gusset_bracket.scad",
+          "iou": 0.9831799018907738,
+          "strictPass": true,
+          "note": "Matches the drawing (overlap with the true solid is 95% or more)."
+        }
+      ]
+    },
+    {
+      "task": "pulley_keyway",
+      "name": "Pulley: bore with keyway (arc over 300 degrees), 6 holes",
+      "level": "complex",
+      "depth": 20,
+      "loops": 8,
+      "drawing": "drawings/pulley_keyway.svg",
+      "expectedVolume": 96575.03258503332,
+      "runs": [
+        {
+          "strategy": "raw-dxf",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/raw-dxf__pulley_keyway.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "No 3D operation: flat 2D shapes only, nothing extruded."
+        },
+        {
+          "strategy": "structured",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/structured__pulley_keyway.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "OpenSCAD syntax error."
+        },
+        {
+          "strategy": "fewshot",
+          "pass": false,
+          "rendered": true,
+          "volErr": 0.3153515763204239,
+          "scad": "scad/fewshot__pulley_keyway.scad",
+          "iou": 0.7592482900236595,
+          "strictPass": false,
+          "note": "Renders, but the geometry is wrong: volume 32% off, overlap 76%."
+        }
+      ]
+    },
+    {
+      "task": "engine_i3",
+      "name": "Inline-3 engine block deck face (1.0 L class)",
+      "level": "complex",
+      "depth": 30,
+      "loops": 20,
+      "drawing": "drawings/engine_i3.svg",
+      "expectedVolume": 1164791.0647145775,
+      "runs": [
+        {
+          "strategy": "raw-dxf",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/raw-dxf__engine_i3.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "The answer was cut off at the token limit before the code was complete."
+        },
+        {
+          "strategy": "structured",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/structured__engine_i3.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "OpenSCAD syntax error."
+        },
+        {
+          "strategy": "fewshot",
+          "pass": true,
+          "rendered": true,
+          "volErr": 0.04859586953794233,
+          "scad": "scad/fewshot__engine_i3.scad",
+          "iou": 0,
+          "strictPass": false,
+          "note": "Within the 5% volume tolerance, but the shape differs from the drawing (overlap 0%)."
+        }
+      ]
+    },
+    {
+      "task": "engine_i4",
+      "name": "Inline-4 engine block deck face (1.6 L class)",
+      "level": "complex",
+      "depth": 30,
+      "loops": 25,
+      "drawing": "drawings/engine_i4.svg",
+      "expectedVolume": 1799339.5594113688,
+      "runs": [
+        {
+          "strategy": "raw-dxf",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/raw-dxf__engine_i4.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "OpenSCAD could not produce a solid from this code."
+        },
+        {
+          "strategy": "structured",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/structured__engine_i4.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "OpenSCAD syntax error."
+        },
+        {
+          "strategy": "fewshot",
+          "pass": false,
+          "rendered": false,
+          "volErr": null,
+          "scad": "scad/fewshot__engine_i4.scad",
+          "iou": null,
+          "strictPass": false,
+          "note": "The answer was cut off at the token limit before the code was complete."
+        }
+      ]
+    }
+  ]
+}

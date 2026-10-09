@@ -1,0 +1,48 @@
+linear_extrude(height = 3)
+  difference() {
+    polygon([[0,0],[120,0],[120,80],[0,80]]);
+    translate([11,12]) circle(r = 4, $fn = 64);
+    translate([25,12]) circle(r = 4, $fn = 64);
+    translate([39,12]) circle(r = 4, $fn = 64);
+    translate([53,12]) circle(r = 4, $fn = 64);
+    translate([67,12]) circle(r = 4, $fn = 64);
+    translate([81,12]) circle(r = 4, $fn = 64);
+    translate([95,12]) circle(r = 4, $fn = 64);
+    translate([109,12]) circle(r = 4, $fn = 64);
+    translate([11,26]) circle(r = 4, $fn = 64);
+    translate([25,26]) circle(r = 4, $fn = 64);
+    translate([39,26]) circle(r = 4, $fn = 64);
+    translate([53,26]) circle(r = 4, $fn = 64);
+    translate([67,26]) circle(r = 4, $fn = 64);
+    translate([81,26]) circle(r = 4, $fn = 64);
+    translate([95,26]) circle(r = 4, $fn = 64);
+    translate([109,26]) circle(r = 4, $fn = 64);
+    translate([11,40]) circle(r = 4, $fn = 64);
+    translate([25,40]) circle(r = 4, $fn = 64);
+    translate([39,40]) circle(r = 4, $fn = 64);
+    translate([53,40]) circle(r = 4, $fn = 64);
+    translate([67,40]) circle(r = 4, $fn = 64);
+    translate([81,40]) circle(r = 4, $fn = 64);
+    translate([95,40]) circle(r = 4, $fn = 64);
+    translate([109,40]) circle(r = 4, $fn = 64);
+    translate([11,54]) circle(r = 4, $fn = 64);
+    translate([25,54]) circle(r = 4, $fn = 64);
+    translate([39,54]) circle(r = 4, $fn = 64);
+    translate([53,54]) circle(r = 4, $fn = 64);
+    translate([67,54]) circle(r = 4, $fn = 64);
+    translate([81,54]) circle(r = 4, $fn = 64);
+    translate([95,54]) circle(r = 4, $fn = 64);
+    translate([109,54]) circle(r = 4, $fn = 64);
+    translate([11,68]) circle(r = 4, $fn = 64);
+    translate([25,68]) circle(r = 4, $fn = 64);
+    translate([39,68]) circle(r = 4, $fn = 64);
+    translate([53,68]) circle(r = 4, $fn = 64);
+    translate([67,68]) circle(r = 4, $fn = 64);
+    translate([81,68]) circle(r = 4, $fn = 64);
+    translate([95,68]) circle(r = 4, $fn = 64);
+    translate([109,68]) circle(r = 4, $fn = 64);
+    translate([4,4]) circle(r = 3, $fn = 64);
+    translate([116,4]) circle(r = 3, $fn = 64);
+    translate([4,76]) circle(r = 3, $fn = 64);
+    translate([116,76]) circle(r = 3, $fn = 64);
+  }
