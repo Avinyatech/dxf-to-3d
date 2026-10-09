@@ -1,0 +1,125 @@
+{
+  "model": "deepseek-coder-v2:16b",
+  "suite": "engines",
+  "date": "2026-10-09T06:53:13.874Z",
+  "runner": "GitHub Actions (CPU)",
+  "overall": {
+    "runs": 6,
+    "rendered": 1,
+    "passed": 1,
+    "passRate": 0.16666666666666666,
+    "meanVolErr": 0.04859586953794233,
+    "meanSeconds": 86.64883333333334,
+    "tokPerSec": 8.434427853423685
+  },
+  "byStrategy": {
+    "raw-dxf": {
+      "runs": 2,
+      "rendered": 0,
+      "passed": 0,
+      "passRate": 0,
+      "meanVolErr": null,
+      "meanSeconds": 60.723,
+      "tokPerSec": 6.900186090937536
+    },
+    "structured": {
+      "runs": 2,
+      "rendered": 0,
+      "passed": 0,
+      "passRate": 0,
+      "meanVolErr": null,
+      "meanSeconds": 155.861,
+      "tokPerSec": 9.23900141793008
+    },
+    "fewshot": {
+      "runs": 2,
+      "rendered": 1,
+      "passed": 1,
+      "passRate": 0.5,
+      "meanVolErr": 0.04859586953794233,
+      "meanSeconds": 43.3625,
+      "tokPerSec": 7.690977226866533
+    }
+  },
+  "byLevel": {
+    "engine": {
+      "runs": 6,
+      "rendered": 1,
+      "passed": 1,
+      "passRate": 0.16666666666666666,
+      "meanVolErr": 0.04859586953794233,
+      "meanSeconds": 86.64883333333334,
+      "tokPerSec": 8.434427853423685
+    }
+  },
+  "results": [
+    {
+      "strategy": "raw-dxf",
+      "task": "engine_i3",
+      "level": "engine",
+      "truthVolume": 1164791.0647145775,
+      "rendered": false,
+      "pass": false,
+      "error": "fetch failed"
+    },
+    {
+      "strategy": "raw-dxf",
+      "task": "engine_i4",
+      "level": "engine",
+      "truthVolume": 1799339.5594113688,
+      "seconds": 121.446,
+      "tokens": 838,
+      "scad": "scad/raw-dxf__engine_i4.scad",
+      "rendered": false,
+      "pass": false,
+      "error": "render failed"
+    },
+    {
+      "strategy": "structured",
+      "task": "engine_i3",
+      "level": "engine",
+      "truthVolume": 1164791.0647145775,
+      "seconds": 143.013,
+      "tokens": 1415,
+      "scad": "scad/structured__engine_i3.scad",
+      "rendered": false,
+      "pass": false,
+      "error": "render failed"
+    },
+    {
+      "strategy": "structured",
+      "task": "engine_i4",
+      "level": "engine",
+      "truthVolume": 1799339.5594113688,
+      "seconds": 168.709,
+      "tokens": 1465,
+      "scad": "scad/structured__engine_i4.scad",
+      "rendered": false,
+      "pass": false,
+      "error": "render failed"
+    },
+    {
+      "strategy": "fewshot",
+      "task": "engine_i3",
+      "level": "engine",
+      "truthVolume": 1164791.0647145775,
+      "seconds": 86.725,
+      "tokens": 667,
+      "scad": "scad/fewshot__engine_i3.scad",
+      "rendered": true,
+      "volErr": 0.04859586953794233,
+      "bboxErr": 1.2598275456739365e-17,
+      "pass": true,
+      "volume": 1108187.030094747
+    },
+    {
+      "strategy": "fewshot",
+      "task": "engine_i4",
+      "level": "engine",
+      "truthVolume": 1799339.5594113688,
+      "rendered": false,
+      "pass": false,
+      "error": "fetch failed"
+    }
+  ]
+}
