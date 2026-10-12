@@ -6,14 +6,14 @@ Runner: GitHub Actions (CPU) - 2026-10-09T10:01:15.210Z
 ## By prompt strategy
 | | Pass | Strict pass (IoU >= 0.95) | Mean IoU | Rendered | Mean volume error | Mean time | tok/s |
 |---|---|---|---|---|---|---|---|
-| raw-dxf | 0/14 (0%) | 0/14 | 0.13 | 4/14 | 35% | 120 s | 7.3 |
-| structured | 0/14 (0%) | 0/14 | 0.00 | 2/14 | 83% | 128 s | 7.9 |
-| fewshot | 4/14 (29%) | 2/14 | 0.45 | 10/14 | 20% | 126 s | 7.6 |
+| raw-dxf | 0/14 (0%) | 0/14 | 0.13 | 4/14 | 35% | 120 s | 7.6 |
+| structured | 0/14 (0%) | 0/14 | 0.00 | 2/14 | 83% | 128 s | 7.6 |
+| fewshot | 4/14 (29%) | 3/14 | 0.53 | 10/14 | 20% | 126 s | 7.6 |
 
 ## By difficulty
 | | Pass | Strict pass (IoU >= 0.95) | Mean IoU | Rendered | Mean volume error | Mean time | tok/s |
 |---|---|---|---|---|---|---|---|
-| complex | 4/42 (10%) | 2/42 | 0.19 | 16/42 | 32% | 124 s | 7.6 |
+| complex | 4/42 (10%) | 3/42 | 0.22 | 16/42 | 32% | 124 s | 7.6 |
 
 ## Every run
 | Strategy | Task | Result | Volume error | Note |

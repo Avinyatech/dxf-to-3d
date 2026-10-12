@@ -231,7 +231,7 @@
           "rendered": true,
           "volErr": 0.7190196318933985,
           "scad": "scad/structured__conrod.scad",
-          "iou": 0.000009914206244465894,
+          "iou": 0.000009914206244467309,
           "strictPass": false,
           "note": "Renders, but the geometry is wrong: volume 72% off, overlap 0%."
         },
@@ -405,9 +405,9 @@
           "rendered": true,
           "volErr": 0.00009482242138555241,
           "scad": "scad/fewshot__pegboard.scad",
-          "iou": 0,
-          "strictPass": false,
-          "note": "Within the 5% volume tolerance, but the shape differs from the drawing (overlap 0%)."
+          "iou": 0.9997717571889828,
+          "strictPass": true,
+          "note": "Matches the drawing (overlap with the true solid is 95% or more)."
         }
       ]
     },

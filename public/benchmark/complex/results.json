@@ -8,8 +8,9 @@
     "rendered": 16,
     "passed": 4,
     "passRate": 0.09523809523809523,
-    "strictPassed": 2,
-    "meanIou": 0.19460335737598894,
+    "strictPassed": 3,
+    "meanIou": 0.21840744683286953,
+    "unmeasured": 0,
     "meanVolErr": 0.315888041338929,
     "meanSeconds": 124.48949999999998,
     "tokPerSec": 7.601520801429229
@@ -22,9 +23,10 @@
       "passRate": 0,
       "strictPassed": 0,
       "meanIou": 0.1290845507426965,
+      "unmeasured": 0,
       "meanVolErr": 0.35446077853631935,
       "meanSeconds": 119.67464285714286,
-      "tokPerSec": 7.281647562289422
+      "tokPerSec": 7.601520801429229
     },
     "structured": {
       "runs": 14,
@@ -32,21 +34,23 @@
       "passed": 0,
       "passRate": 0,
       "strictPassed": 0,
-      "meanIou": 7.08157588890421e-7,
+      "meanIou": 7.081575888905221e-7,
+      "unmeasured": 0,
       "meanVolErr": 0.8328497668610615,
       "meanSeconds": 128.09092857142855,
-      "tokPerSec": 7.905656305537418
+      "tokPerSec": 7.601520801429229
     },
     "fewshot": {
       "runs": 14,
       "rendered": 10,
       "passed": 4,
       "passRate": 0.2857142857142857,
-      "strictPassed": 2,
-      "meanIou": 0.4547248132276816,
+      "strictPassed": 3,
+      "meanIou": 0.5261370815983232,
+      "unmeasured": 0,
       "meanVolErr": 0.19706660135554627,
       "meanSeconds": 125.70292857142856,
-      "tokPerSec": 7.596140787718891
+      "tokPerSec": 7.601520801429229
     }
   },
   "byLevel": {
@@ -55,8 +59,9 @@
       "rendered": 16,
       "passed": 4,
       "passRate": 0.09523809523809523,
-      "strictPassed": 2,
-      "meanIou": 0.19460335737598894,
+      "strictPassed": 3,
+      "meanIou": 0.21840744683286953,
+      "unmeasured": 0,
       "meanVolErr": 0.315888041338929,
       "meanSeconds": 124.48949999999998,
       "tokPerSec": 7.601520801429229
@@ -351,7 +356,7 @@
       "bboxErr": 0.041028431022800266,
       "pass": false,
       "volume": 35238.482691559984,
-      "iou": 0.000009914206244465894,
+      "iou": 0.000009914206244467309,
       "strictPass": false
     },
     {
@@ -627,8 +632,8 @@
       "bboxErr": 0,
       "pass": true,
       "volume": 22439.061057845083,
-      "iou": 0,
-      "strictPass": false
+      "iou": 0.9997717571889828,
+      "strictPass": true
     },
     {
       "strategy": "fewshot",
@@ -695,5 +700,6 @@
       "error": "ERROR: Parser error: syntax error in file public/benchmark/complex/scad/fewshot__engine_i4.scad, line 1 | Can't parse file 'public/benchmark/complex/scad/fewshot__engine_i4.scad'!",
       "strictPass": false
     }
-  ]
+  ],
+  "rescored": "2026-10-12T07:25:35.727Z"
 }
