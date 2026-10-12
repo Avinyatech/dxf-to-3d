@@ -55,3 +55,18 @@ Run: `gh workflow run benchmark.yml -f suite=engines`; results land in `public/b
 
 1 of 6 passed, and that pass is within tolerance only because the benchmark allows 5% volume error. The model copied wrong numbers, invented OpenSCAD functions and misread bulge values.
 Only the flat deck face is a valid 2D-to-3D extrusion target; real engines are mostly non-prismatic.
+
+### Complex suite: 14 complicated parts (gear, sprocket, flange, brake disc, heat sink, connecting rod, cam, wheel, T-slot, perforated board, bracket, pulley, two engine decks)
+`bench/complex.mjs` generates 12 parametric parts plus the two engine decks (2 to 45 loops, outlines up to 168 vertices, arcs over 180 degrees). Run: `gh workflow run benchmark.yml -f suite=complex`; the page with every drawing, outcome and generated code is `benchmark/complex/`.
+Scoring is stricter than the base suite: a **strict pass** also needs at least 95% overlap (IoU) with the exact solid, measured with OpenSCAD intersection.
+
+| Prompt strategy (DeepSeek-Coder-V2 16B, 4096-token context) | Pass (volume + bbox) | Strict pass (IoU >= 0.95) | Mean IoU |
+|---|---|---|---|
+| raw DXF text | 0/14 | 0/14 | 0.13 |
+| parsed entity JSON | 0/14 | 0/14 | 0.00 |
+| JSON + worked example | 4/14 | 3/14 (heat sink, perforated board, gusset bracket) | 0.53 |
+| **All** | **4/42** | **3/42** | **0.22** |
+
+Failure causes across the 38 failing runs: OpenSCAD syntax errors (12), solids with the wrong geometry (12), answers cut off at the token limit (6), no solid produced (3), flat 2D output (2), invented functions (1), empty geometry (1), a server error (1).
+The fourth "pass" (inline-3 engine, worked example) matches volume within 5% but its overlap is 0.00: the code merged the slots into the outline and produced an invalid solid.
+Measurement note: an earlier version recorded a failed overlap measurement as 0.00 (it hid the perforated-board pass). Failures and timeouts are now "unmeasured", and `bench/rescore.mjs` re-scores saved results without calling the model.
