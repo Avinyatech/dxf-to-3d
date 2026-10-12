@@ -7,6 +7,7 @@ import { engines } from './engines.mjs';
 import { complexSuite } from './complex.mjs';
 import { parseDxf } from '../src/pipeline.js';
 import { toOpenSCAD } from '../src/openscad.js';
+import { overlapFromRender, iouValue } from './iou.mjs';
 import { groundTruth, measureStl, score } from './score.mjs';
 import { buildMessages, extractCode } from '../src/prompt.js';
 
@@ -32,13 +33,13 @@ async function chat(messages) {
   return { text: j.message.content, seconds: (Date.now() - t0) / 1000, tokens: j.eval_count };
 }
 
-function render(scadPath, stlPath) {
+function render(scadPath, stlPath, timeout = 90000) {
   const args = ['-o', stlPath, scadPath];
   const cmd = process.env.XVFB ? 'xvfb-run' : openscad;
-  const r = spawnSync(cmd, process.env.XVFB ? ['-a', openscad, ...args] : args, { encoding: 'utf8', timeout: 90000 });
+  const r = spawnSync(cmd, process.env.XVFB ? ['-a', openscad, ...args] : args, { encoding: 'utf8', timeout });
   if (r.status !== 0) {
     const text = [r.stderr, r.stdout].filter(Boolean).join('\n'), lines = text.split('\n').filter((l) => /error|warning|unknown|empty|parse/i.test(l));
-    return { error: (lines.slice(0, 3).join(' | ') || r.error?.message || 'render failed').slice(0, 400) };
+    return { error: (lines.slice(0, 3).join(' | ') || r.error?.message || 'render failed').slice(0, 400), timedOut: r.error?.code === 'ETIMEDOUT' };
   }
   try { return { stl: readFileSync(stlPath, 'utf8') }; } catch { return { error: 'no STL produced (empty geometry?)' }; }
 }
@@ -60,9 +61,9 @@ function iouUnsafe(task, base, genVolume) {
   if (!t) return null;
   const p = join(out, 'scad', `iou__${base}.scad`), s = join(out, 'scad', `iou__${base}.stl`);
   writeFileSync(p, `intersection() { import("${base}.stl"); import("truth__${task.id}.stl"); }\n`);
-  const x = render(p, s), inter = x.stl ? measureStl(x.stl)?.volume ?? 0 : 0;
+  const x = render(p, s, 300000), inter = overlapFromRender(x, measureStl);
   rmSync(p, { force: true }); rmSync(s, { force: true });
-  return Math.max(0, Math.min(1, inter / (genVolume + t.volume - inter)));
+  return iouValue(inter, genVolume, t.volume);
 }
 
 const results = [];

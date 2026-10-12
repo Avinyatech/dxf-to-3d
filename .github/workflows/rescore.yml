@@ -1,0 +1,55 @@
+name: Re-score saved benchmark results (no model)
+on:
+  workflow_dispatch:
+    inputs:
+      suite:
+        description: complex, engines or base
+        default: complex
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  rescore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: sudo apt-get update && sudo apt-get install -y openscad xvfb
+      - name: Re-score overlap from the saved code
+        env:
+          XVFB: "1"
+        run: |
+          OUT=public/benchmark
+          [ "${{ inputs.suite }}" != base ] && OUT=public/benchmark/${{ inputs.suite }}
+          node bench/rescore.mjs "$OUT" "${{ inputs.suite }}"
+          node bench/gallery.mjs "$OUT" "${{ inputs.suite }}"
+          node bench/report.mjs "$OUT" >> "$GITHUB_STEP_SUMMARY"
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/benchmark
+          git commit -m "Re-scored ${{ inputs.suite }} overlap (IoU)" || echo "nothing to commit"
+          git pull --rebase origin main && git push origin HEAD:main
+      - run: npm run build
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+  deploy:
+    needs: rescore
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.d.outputs.page_url }}
+    steps:
+      - id: d
+        uses: actions/deploy-pages@v4
